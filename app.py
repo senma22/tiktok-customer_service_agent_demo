@@ -8,8 +8,11 @@ import os
 import streamlit as st
 
 # Ensure API key is available before agent module is imported
-if "ANTHROPIC_API_KEY" in st.secrets:
-    os.environ["ANTHROPIC_API_KEY"] = st.secrets["ANTHROPIC_API_KEY"]
+try:
+    if "ANTHROPIC_API_KEY" in st.secrets:
+        os.environ["ANTHROPIC_API_KEY"] = st.secrets["ANTHROPIC_API_KEY"]
+except Exception:
+    pass  # Running locally or no secrets file configured
 
 from agent import run_agent
 

@@ -24,7 +24,19 @@ from knowledge_loader import (
 
 load_dotenv(os.path.join(os.path.dirname(os.path.abspath(__file__)), ".env"), override=True)
 
-client = anthropic.Anthropic(api_key=os.getenv("ANTHROPIC_API_KEY"))
+_client = None
+
+def get_client():
+    """Return the Anthropic client, initializing it on first use.
+
+    Lazy initialization ensures the API key is resolved at call time
+    rather than at module import time, which fixes Streamlit Cloud
+    secret loading order issues.
+    """
+    global _client
+    if _client is None:
+        _client = anthropic.Anthropic(api_key=os.getenv("ANTHROPIC_API_KEY"))
+    return _client
 
 # Load the knowledge base and build both system prompts once when the module
 # is first imported. Every subsequent call reuses these strings from memory,
@@ -73,7 +85,7 @@ def classify_message(message: str, order_context: str = "") -> str:
     if order_context.strip():
         user_content += f"\nOrder context: {order_context}"
 
-    response = client.messages.create(
+    response = get_client().messages.create(
         model="claude-haiku-4-5-20251001",
         max_tokens=50,
         system=[
@@ -127,7 +139,7 @@ def draft_response(
         "a team member will personally follow up."
     )
 
-    response = client.messages.create(
+    response = get_client().messages.create(
         model="claude-sonnet-4-6",
         max_tokens=200,
         system=[

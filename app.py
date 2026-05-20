@@ -3,7 +3,14 @@ app.py
 LuxePress Customer Service Agent — Streamlit UI
 """
 
+import os
+
 import streamlit as st
+
+# Ensure API key is available before agent module is imported
+if "ANTHROPIC_API_KEY" in st.secrets:
+    os.environ["ANTHROPIC_API_KEY"] = st.secrets["ANTHROPIC_API_KEY"]
+
 from agent import run_agent
 
 # ── Config ────────────────────────────────────────────────────────────────────

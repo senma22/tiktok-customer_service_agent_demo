@@ -8,34 +8,15 @@ import os
 import streamlit as st
 
 # Ensure API key is available before agent module is imported
-_secrets_debug = {"env_found": False, "secrets_keys": [], "secrets_error": None}
-
-if os.getenv("ANTHROPIC_API_KEY"):
-    _secrets_debug["env_found"] = True
-else:
-    try:
-        _secrets_debug["secrets_keys"] = list(st.secrets.keys())
-        # Try common variations
-        for key_name in ["ANTHROPIC_API_KEY", "anthropic_api_key", "Anthropic_API_Key"]:
-            if key_name in st.secrets:
-                os.environ["ANTHROPIC_API_KEY"] = st.secrets[key_name]
-                break
-        # Also check nested sections
-        for section in _secrets_debug["secrets_keys"]:
-            try:
-                sub = st.secrets[section]
-                if hasattr(sub, "keys") and "ANTHROPIC_API_KEY" in sub:
-                    os.environ["ANTHROPIC_API_KEY"] = sub["ANTHROPIC_API_KEY"]
-            except Exception:
-                pass
-    except Exception as e:
-        _secrets_debug["secrets_error"] = str(e)
-
-# Show debug info if key still missing
 if not os.getenv("ANTHROPIC_API_KEY"):
-    st.error("⚠️ ANTHROPIC_API_KEY not found")
-    st.write("**Debug info:**")
-    st.json(_secrets_debug)
+    try:
+        if "ANTHROPIC_API_KEY" in st.secrets:
+            os.environ["ANTHROPIC_API_KEY"] = st.secrets["ANTHROPIC_API_KEY"]
+    except Exception:
+        pass
+
+if not os.getenv("ANTHROPIC_API_KEY"):
+    st.error("ANTHROPIC_API_KEY not configured. Set it in Streamlit Cloud → Settings → Secrets.")
     st.stop()
 
 from agent import run_agent

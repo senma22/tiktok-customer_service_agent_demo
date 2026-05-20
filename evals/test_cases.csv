@@ -1,0 +1,32 @@
+message,expected_category,expected_escalation,notes
+"Where is my package? I ordered 5 days ago and haven't received anything.",shipping_inquiry,False,Happy path — basic shipping status
+"My tracking number hasn't updated in 3 days, what's happening?",shipping_inquiry,False,Happy path — stalled tracking
+"When will my order be shipped? I placed it yesterday.",shipping_inquiry,False,Happy path — pre-shipment inquiry
+"Tracking says my package was delivered but I never got it.",shipping_inquiry,False,Happy path — delivered but missing
+"I started a refund request on TikTok Shop, can you help me with it?",returns_refunds,False,Happy path — open refund request
+"I opened a return request because I no longer need the product.",returns_refunds,False,Happy path — no longer needed
+"My package never arrived and I submitted a refund through TikTok Shop.",returns_refunds,False,Happy path — missing package with open request
+"I filed a return request because the quality didn't meet my expectations.",returns_refunds,False,Happy path — quality complaint with open request
+"The nails are way too big for my fingers can I exchange them?",sizing_fit,False,Happy path — nails too big
+"My nails are too loose and keep falling off I need a smaller size.",sizing_fit,False,Happy path — nails too loose
+"Can I get a different size? These don't fit right.",sizing_fit,False,Happy path — general fit issue
+"What sizes do you offer?",product_question,False,Happy path — size inquiry (product info)
+"Are your press-on nails reusable?",product_question,False,Happy path — product feature question
+"What comes included in the nail kit?",product_question,False,Happy path — toolkit contents question
+"I saw the nails for 35% off on your live but I paid full price why is that?",product_question,False,Happy path — live discount price question
+"What nail shapes are available in your store?",product_question,False,Happy path — product variety question
+"I just received my package and the nails inside are completely cracked.",damaged_item,False,Happy path — damaged on arrival no request open
+"My order arrived today but several nails look broken.",damaged_item,False,Happy path — broken nails received
+"The packaging was crushed when I got it and some nail pieces are missing.",damaged_item,False,Happy path — damaged packaging with missing parts
+"I'm going to sue your company for sending me a broken product.",escalate_other,True,Escalation — legal threat
+"I'm filing a chargeback with my bank right now.",escalate_other,True,Escalation — chargeback keyword
+"I'll report your shop to the BBB if this isn't resolved immediately.",escalate_other,True,Escalation — BBB report threat
+"I had a severe allergic reaction to your nails this is dangerous.",escalate_other,True,Escalation — health and safety
+"This is a total scam I'm going to warn everyone online about you.",escalate_other,True,Escalation — fraud and reputation
+"I'm contacting my credit card company to dispute this charge.",escalate_other,True,Escalation — payment dispute
+"I don't want this product anymore.",returns_refunds,False,Edge case — vague no-longer-needed with no reason given
+"The nails look completely different from the photos on your listing.",product_question,False,Edge case — listing accuracy complaint with no return request open
+"I want a refund the nails are too small for me.",sizing_fit,False,Edge case — refund language but root cause is sizing; should redirect to exchange
+"My package arrived and the box was damaged and the nails inside are also broken.",damaged_item,False,Edge case — damaged packaging plus damaged product; no open request
+"I have been waiting 2 weeks and still nothing this is absolutely ridiculous!",shipping_inquiry,False,Edge case — frustrated tone but no escalation keyword; still a shipping inquiry
+"You sent me the completely wrong nail shape this is not what I ordered.",returns_refunds,False,Edge case — wrong item sent; seller fault return scenario

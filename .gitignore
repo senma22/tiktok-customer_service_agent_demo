@@ -1,0 +1,11 @@
+.env
+__pycache__/
+*.pyc
+*.pyo
+.streamlit/secrets.toml
+evals/results/
+.DS_Store
+*.docx
+*.jpeg
+*.jpg
+*.png
